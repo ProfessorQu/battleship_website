@@ -623,7 +623,7 @@ function __wbg_get_imports() {
         const ret = makeClosure(arg0, arg1, 161, __wbg_adapter_18);
         return addHeapObject(ret);
     };
-    imports.wbg.__wbindgen_closure_wrapper3458 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbindgen_closure_wrapper3460 = function(arg0, arg1, arg2) {
         const ret = makeMutClosure(arg0, arg1, 270, __wbg_adapter_21);
         return addHeapObject(ret);
     };
@@ -666,7 +666,7 @@ async function __wbg_init(input) {
     if (wasm !== undefined) return wasm;
 
     if (typeof input === 'undefined') {
-        input = new URL('battleship_website-e61890f6b210760b_bg.wasm', import.meta.url);
+        input = new URL('battleship_website-50e969ae5ab6fc19_bg.wasm', import.meta.url);
     }
     const imports = __wbg_get_imports();
 

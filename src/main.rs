@@ -39,52 +39,6 @@ where F: Function
     })
 }
 
-// fn get_shoot_callback(
-//     game: UseStateHandle<Game>,
-//     func: ShootFunction,
-//     player: usize,
-// ) -> Callback<MouseEvent> {
-//     Callback::from(move |_| {
-//         let mut new_game = Game {
-//             player1_shoot_fn: game.player1_shoot_fn,
-//             player2_shoot_fn: game.player2_shoot_fn,
-
-//             player1_place_fn: game.player1_place_fn,
-//             player2_place_fn: game.player2_place_fn,
-//         };
-
-//         match player {
-//             1 => new_game.player1_shoot_fn = func,
-//             2 => new_game.player2_shoot_fn = func,
-//             _ => {}
-//         }
-//         game.set(new_game);
-//     })
-// }
-
-// fn get_place_callback(
-//     game: UseStateHandle<Game>,
-//     func: PlaceFunction,
-//     player: usize,
-// ) -> Callback<MouseEvent> {
-//     Callback::from(move |_| {
-//         let mut new_game = Game {
-//             player1_shoot_fn: game.player1_shoot_fn,
-//             player2_shoot_fn: game.player2_shoot_fn,
-
-//             player1_place_fn: game.player1_place_fn,
-//             player2_place_fn: game.player2_place_fn,
-//         };
-
-//         match player {
-//             1 => new_game.player1_place_fn = func,
-//             2 => new_game.player2_place_fn = func,
-//             _ => {}
-//         }
-//         game.set(new_game);
-//     })
-// }
-
 fn generate_button<F>(
     game: UseStateHandle<Game>,
     func: F,
@@ -98,28 +52,6 @@ where F: Function
         <button onclick={callback}>{ text }</button>
     }
 }
-
-// fn generate_place_button(
-//     game: UseStateHandle<Game>,
-//     func: F,
-//     player: usize,
-//     text: &str,
-// ) -> Html {
-//     html! {
-//         <button onclick={get_place_callback(game, func, player)}>{ text }</button>
-//     }
-// }
-
-// fn generate_shot_button(
-//     game: UseStateHandle<Game>,
-//     func: ShootFunction,
-//     player: usize,
-//     text: &str,
-// ) -> Html {
-//     html! {
-//         <button onclick={get_shoot_callback(game, func, player)}>{ text }</button>
-//     }
-// }
 
 fn create_table<F, I>(game: UseStateHandle<Game>, functions: I, is_shoot: bool) -> Html
     where
@@ -145,15 +77,15 @@ fn create_table<F, I>(game: UseStateHandle<Game>, functions: I, is_shoot: bool) 
     let data = if is_shoot {
         html!(
             <tr>
-                <td>{format!("{}", game.player1_shoot_fn)}</td>
-                <td>{format!("{}", game.player2_shoot_fn)}</td>
+                <th><div class="func">{format!("{}", game.player1_shoot_fn)}</div></th>
+                <th><div class="func">{format!("{}", game.player2_shoot_fn)}</div></th>
             </tr>
         )
     } else {
         html!(
             <tr>
-                <td>{format!("{}", game.player1_place_fn)}</td>
-                <td>{format!("{}", game.player2_place_fn)}</td>
+                <th><div class="func">{format!("{}", game.player1_place_fn)}</div></th>
+                <th><div class="func">{format!("{}", game.player2_place_fn)}</div></th>
             </tr>
         )
     };
@@ -166,35 +98,6 @@ fn create_table<F, I>(game: UseStateHandle<Game>, functions: I, is_shoot: bool) 
         </table>
     )
 }
-
-// fn create_shot_table(game: UseStateHandle<Game>) -> Html {
-//     let headers = html!(
-//         <tr>
-//             <th>{ "Player 1" }</th>
-//             <th>{ "Player 2" }</th>
-//         </tr>
-//     );
-
-//     let buttons: Html = ShootFunction::list().iter().map(|func| {
-//         html!(
-//             <tr>
-//                 <td>{generate_button(game.clone(), *func, 1, func.name())}</td>
-//                 <td>{generate_button(game.clone(), *func, 2, func.name())}</td>
-//             </tr>
-//         )
-//     }).collect();
-
-//     html!(
-//         <table>
-//             { headers }
-//             { buttons }
-//             <tr>
-//                 <td>{format!("{}", game.player1_shoot_fn)}</td>
-//                 <td>{format!("{}", game.player2_shoot_fn)}</td>
-//             </tr>
-//         </table>
-//     )
-// }
 
 #[function_component(App)]
 fn app() -> Html {
@@ -209,6 +112,7 @@ fn app() -> Html {
     html!(
         <>
         { create_table(game.clone(), ShootFunction::list().iter().cloned(), true) }
+        <br />
         { create_table(game.clone(), PlaceFunction::list().iter().cloned(), false) }
         </>
     )
