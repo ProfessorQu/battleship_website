@@ -6,7 +6,7 @@ use game_options::{GameOptions, ShootFunction, Function};
 mod game;
 use game::generate_boats;
 
-use crate::game_options::{PlaceFunction, generate_table};
+use crate::{game_options::{PlaceFunction, generate_table}, game::generate_shots};
 use battleship_bot::*;
 
 fn play_callback(
@@ -52,6 +52,7 @@ fn app() -> Html {
     }
 
     let boats = generate_boats(recording.clone());
+    let shots = generate_shots(recording.clone());
 
     html!(
         <>
@@ -70,7 +71,10 @@ fn app() -> Html {
             <button onclick={play_callback(game_options.clone(), recording.clone())}>{ "Play" }</button>
             <br />
             { win_text }
+            <br />
             { boats }
+            <br />
+            { shots }
         </>
     )
 }

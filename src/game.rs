@@ -44,3 +44,63 @@ pub fn generate_boats(recording: UseStateHandle<Option<Recording>>) -> Html {
         </>
     )
 }
+
+pub fn generate_shots(recording: UseStateHandle<Option<Recording>>) -> Html {
+    if recording.is_none() {
+        return html!()
+    }
+
+    let recording = recording.as_ref().expect("How");
+
+    let player1_shots: Html = recording.player1_shots.last().expect("No shots")
+        .iter().map(|row| {
+        let row: Html = row.iter().map(|item| {
+            if let Some(shot) = item {
+                match shot {
+                    Shot::Miss => html!(<td class="miss"></td>),
+                    Shot::Hit(_) => html!(<td class="hit"></td>)
+                }
+            } else {
+                html!(<td />)
+            }
+        }).collect();
+
+        html!(
+            <tr>{row}</tr>
+        )
+    }).collect();
+
+    let player2_shots: Html = recording.player2_shots.last().expect("No shots")
+        .iter().map(|row| {
+        let row: Html = row.iter().map(|item| {
+            if let Some(shot) = item {
+                match shot {
+                    Shot::Miss => html!(<td class="miss"></td>),
+                    Shot::Hit(_) => html!(<td class="hit"></td>)
+                }
+            } else {
+                html!(<td />)
+            }
+        }).collect();
+
+        html!(
+            <tr>{row}</tr>
+        )
+    }).collect();
+
+    html!(
+        <>
+            { "Shots" }
+            <br />
+            <table class="shots">
+                <tr>{ "P1" }</tr>
+                { player1_shots }
+            </table>
+            <span class="tab" />
+            <table class="shots">
+                <tr>{ "P2" }</tr>
+                { player2_shots }
+            </table>
+        </>
+    )
+}

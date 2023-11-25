@@ -48,27 +48,43 @@ td :hover {
 }
 
 .boats td {
-    aspect-ratio: 1;
     width: 2em;
     height: 2em;
 }
 
-.boat1 {
+.boats .boat1 {
     background-color: red;
 }
 
-.boat2 {
+.boats .boat2 {
     background-color: green;
 }
 
-.boat3 {
+.boats .boat3 {
     background-color: blue;
 }
 
-.boat4 {
+.boats .boat4 {
     background-color: pink;
 }
 
-.boat5 {
+.boats .boat5 {
     background-color: yellow;
+}
+
+.shots {
+    display: inline;
+}
+
+.shots td {
+    width: 2em;
+    height: 2em;
+}
+
+.shots .hit {
+    background-color: red;
+}
+
+.shots .miss {
+    background-color: gray;
 }
