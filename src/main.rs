@@ -1,107 +1,36 @@
 use yew::prelude::*;
 
+mod game_options;
+use game_options::{GameOptions, ShootFunction, Function};
+
 mod game;
-use game::{Game, ShootFunction, Function};
+use game::generate_boats;
 
-use crate::game::PlaceFunction;
+use crate::game_options::{PlaceFunction, generate_table};
+use battleship_bot::*;
 
-fn get_callback<F>(
-    game: UseStateHandle<Game>,
-    func: F,
-    player: usize,
-) -> Callback<MouseEvent>
-where F: Function    
-{
+fn play_callback(
+    game_options: UseStateHandle<GameOptions>,
+    result: UseStateHandle<Option<Recording>>
+) -> Callback<MouseEvent> {
     Callback::from(move |_| {
-        let mut new_game = Game {
-            player1_shoot_fn: game.player1_shoot_fn,
-            player2_shoot_fn: game.player2_shoot_fn,
+        let result = result.clone();
 
-            player1_place_fn: game.player1_place_fn,
-            player2_place_fn: game.player2_place_fn,
-        };
+        let mut game = Battleship::new(
+            game_options.player1_place_fn.battleship_fn(),
+            game_options.player2_place_fn.battleship_fn(),
 
-        if let Some(shoot_fn) = func.as_any().downcast_ref::<ShootFunction>() {
-            match player {
-                1 => new_game.player1_shoot_fn = *shoot_fn,
-                2 => new_game.player2_shoot_fn = *shoot_fn,
-                _ => {}
-            }
-        } else if let Some(place_fn) = func.as_any().downcast_ref::<PlaceFunction>() {
-            match player {
-                1 => new_game.player1_place_fn = *place_fn,
-                2 => new_game.player2_place_fn = *place_fn,
-                _ => {}
-            }
-        }
+            game_options.player1_shoot_fn.battleship_fn(),
+            game_options.player2_shoot_fn.battleship_fn(),
+        );
 
-        game.set(new_game);
+        result.set(Some(game.play_and_record_game()));
     })
-}
-
-fn generate_button<F>(
-    game: UseStateHandle<Game>,
-    func: F,
-    player: usize,
-    text: &str,
-) -> Html
-where F: Function
-{
-    let callback = get_callback(game, func, player);
-    html! {
-        <button onclick={callback}>{ text }</button>
-    }
-}
-
-fn create_table<F, I>(game: UseStateHandle<Game>, functions: I, is_shoot: bool) -> Html
-    where
-    F: Function + Copy,
-    I: Iterator<Item = F>
-{
-    let headers = html!(
-        <tr>
-            <th>{ "Player 1" }</th>
-            <th>{ "Player 2" }</th>
-        </tr>
-    );
-
-    let buttons: Html = functions.map(|func| {
-        html!(
-            <tr>
-                <td>{generate_button(game.clone(), func, 1, func.name())}</td>
-                <td>{generate_button(game.clone(), func, 2, func.name())}</td>
-            </tr>
-        )
-    }).collect();
-
-    let data = if is_shoot {
-        html!(
-            <tr>
-                <th><div class="func">{format!("{}", game.player1_shoot_fn)}</div></th>
-                <th><div class="func">{format!("{}", game.player2_shoot_fn)}</div></th>
-            </tr>
-        )
-    } else {
-        html!(
-            <tr>
-                <th><div class="func">{format!("{}", game.player1_place_fn)}</div></th>
-                <th><div class="func">{format!("{}", game.player2_place_fn)}</div></th>
-            </tr>
-        )
-    };
-
-    html!(
-        <table>
-            { headers }
-            { buttons }
-            { data }
-        </table>
-    )
 }
 
 #[function_component(App)]
 fn app() -> Html {
-    let game = use_state(|| Game {
+    let game_options = use_state(|| GameOptions {
         player1_shoot_fn: ShootFunction::Random,
         player2_shoot_fn: ShootFunction::Random,
 
@@ -109,11 +38,39 @@ fn app() -> Html {
         player2_place_fn: PlaceFunction::Random,
     });
 
+    let recording = use_state(||
+        None::<Recording>
+    );
+
+    let mut win_text = "No games played";
+
+    if let Some(recording) = recording.clone().as_ref() {
+        win_text = match recording.winner {
+            Player::P1 => "Player 1 won",
+            Player::P2 => "Player 2 won",
+        };
+    }
+
+    let boats = generate_boats(recording.clone());
+
     html!(
         <>
-        { create_table(game.clone(), ShootFunction::list().iter().cloned(), true) }
-        <br />
-        { create_table(game.clone(), PlaceFunction::list().iter().cloned(), false) }
+            <h2>{ "Shoot function" }</h2>
+            { generate_table(game_options.clone(), ShootFunction::list().iter().cloned()) }
+            <h2>{ "Place function" }</h2>
+            { generate_table(game_options.clone(), PlaceFunction::list().iter().cloned()) }
+            <br />
+            { "Player 1:" }<br />
+            <span class="tab" />{ "Shoot: " }{ game_options.player1_shoot_fn.name() }<br />
+            <span class="tab" />{ "Place: " }{ game_options.player1_place_fn.name() }<br />
+            { "Player 2:"}<br />
+            <span class="tab" />{ "Shoot: " }{ game_options.player2_shoot_fn.name() }<br />
+            <span class="tab" />{ "Place: " }{ game_options.player2_place_fn.name() }<br />
+
+            <button onclick={play_callback(game_options.clone(), recording.clone())}>{ "Play" }</button>
+            <br />
+            { win_text }
+            { boats }
         </>
     )
 }

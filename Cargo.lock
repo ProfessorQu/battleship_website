@@ -46,9 +46,9 @@ dependencies = [
 
 [[package]]
 name = "battleship_bot"
-version = "1.1.0"
+version = "1.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7ab957d5ad69522b75cde39815545df6a244074ea9a845292e927979679be36c"
+checksum = "7c5d93f4da9b736f95dc75929fe9691598f12b97a1b4690721257787b8191343"
 dependencies = [
  "rand",
 ]
