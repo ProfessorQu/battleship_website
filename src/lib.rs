@@ -16,10 +16,13 @@ pub struct App {
 
     player1_shoot_fn: Function,
     player2_shoot_fn: Function,
+
+    recording: Option<Recording>
 }
 
 pub enum Msg {
-    SetFunction(Function, Player)
+    SetFunction(Function, Player),
+    PlayGame(Box<Recording>),
 }
 
 impl Component for App {
@@ -33,6 +36,8 @@ impl Component for App {
 
             player1_shoot_fn: Function::ShootFunction(shoot::random),
             player2_shoot_fn: Function::ShootFunction(shoot::random),
+            
+            recording: None
         }
     }
 
@@ -48,6 +53,7 @@ impl Component for App {
                     Function::ShootFunction(func) => self.player2_shoot_fn = Function::ShootFunction(func),
                 }
             }
+            Msg::PlayGame(recording) => self.recording = Some(recording.as_ref().clone())
         }
 
         true
@@ -70,6 +76,8 @@ impl Component for App {
                 player2_fns={
                     (self.player2_place_fn.clone(), self.player2_shoot_fn.clone())
                 }
+                on_click={ctx.link().callback(|recording: Recording| Msg::PlayGame(Box::new(recording)))}
+                recording={self.recording.clone()}
                 />
         </>
         }
