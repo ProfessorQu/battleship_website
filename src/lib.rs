@@ -28,7 +28,7 @@ pub struct App {
 pub enum Msg {
     ShowOptions(bool),
     SetFunction(Function, Player),
-    PlayGame(Box<Recording>),
+    SaveRecording(Box<Recording>),
 }
 
 impl Component for App {
@@ -52,6 +52,7 @@ impl Component for App {
     fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
             Msg::ShowOptions(show) => self.show_options = show,
+            Msg::SaveRecording(recording) => self.recording = Some(*recording.clone()),
             Msg::SetFunction(func, player) => match player {
                 Player::P1 => match func {
                     Function::PlaceFunction(func) => self.player1_place_fn = Function::PlaceFunction(func),
@@ -62,7 +63,6 @@ impl Component for App {
                     Function::ShootFunction(func) => self.player2_shoot_fn = Function::ShootFunction(func),
                 }
             }
-            Msg::PlayGame(recording) => self.recording = Some(recording.as_ref().clone())
         }
 
         true
@@ -91,7 +91,7 @@ impl Component for App {
             <Game
                 player1_fns={ (self.player1_place_fn.clone(), self.player1_shoot_fn.clone()) }
                 player2_fns={ (self.player2_place_fn.clone(), self.player2_shoot_fn.clone()) }
-                onclick={ctx.link().callback(|recording: Recording| Msg::PlayGame(Box::new(recording)))}
+                onclick={ctx.link().callback(|recording: Recording| Msg::SaveRecording(Box::new(recording)))}
                 recording={self.recording.clone()}
             />
         </div>

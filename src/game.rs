@@ -73,8 +73,10 @@ fn generate_shots(recording: Recording, player: Player) -> Html {
 #[function_component]
 pub fn Game(
     GameProps {
-        player1_fns, player2_fns,
-        onclick, recording
+        player1_fns,
+        player2_fns,
+        onclick,
+        recording,
     }: &GameProps
 ) -> Html {
     let game = Battleship::new(
