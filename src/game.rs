@@ -7,7 +7,7 @@ use crate::function::Function;
 pub struct GameProps {
     pub player1_fns: (Function, Function),
     pub player2_fns: (Function, Function),
-    pub on_click: Callback<Recording>,
+    pub onclick: Callback<Recording>,
     pub recording: Option<Recording>,
 }
 
@@ -74,7 +74,7 @@ fn generate_shots(recording: Recording, player: Player) -> Html {
 pub fn Game(
     GameProps {
         player1_fns, player2_fns,
-        on_click, recording
+        onclick, recording
     }: &GameProps
 ) -> Html {
     let game = Battleship::new(
@@ -85,26 +85,30 @@ pub fn Game(
         player2_fns.1.clone().try_into().unwrap(),
     );
 
-    let on_click = {
-        let on_click = on_click.clone();
+    let onclick = {
+        let onclick = onclick.clone();
         Callback::from(move |_| {
-            on_click.emit(game.clone().play_and_record_game())
+            onclick.emit(game.clone().play_and_record_game())
         })
     };
 
+    let play_button = html!( 
+        <button class="important" {onclick}>{"Play game"}</button>
+    );
+
     if recording.is_none() {
-        return html!( 
-            <button onclick={on_click}>{"Play game"}</button>
-        )
+        return play_button
     }
 
     let recording = recording.clone().unwrap();
 
     html! {
     <>
-        <button onclick={on_click}>{"Play game"}</button>
+        {play_button}
 
-        <h2>{recording.clone().winner.to_string()}{" won"}</h2>
+        <h3>{recording.clone().winner.to_string()}{" won"}</h3>
+        <p>{"P1(shoot="}{player1_fns.0.name().to_lowercase()}{",place="}{player1_fns.1.name().to_lowercase()}{")"}<br />
+        {"P2(shoot="}{player2_fns.0.name().to_lowercase()}{",place="}{player2_fns.1.name().to_lowercase()}{")"}</p>
         {generate_boats(recording.clone(), Player::P1)}
         <span class="tab" />
         {generate_boats(recording.clone(), Player::P2)}

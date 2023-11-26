@@ -4,9 +4,17 @@ body {
     font-size: large;
 }
 
-td, th {
+.tab {
+    margin-left: 2em;
+}
+
+td {
     border: 1px solid black;
     height: 2em;
+}
+
+th {
+    border: 1px solid black;
 }
 
 table {
@@ -15,32 +23,53 @@ table {
     table-layout: fixed;
 }
 
-table button {
-    width: 100%;
+button {
     background-color: lightskyblue;
     border: none;
     padding: 0.1em;
     font-family: Arial, Helvetica, sans-serif;
     font-size: large;
-    height: 2em;
+    transition-duration: 0.4s;
+}
+
+p {
+    margin: 0%;
+    margin-bottom: 1em;
+}
+
+.important {
+    background-color: lightsteelblue;
+    border: 1px solid darkblue;
+    padding: 0.5em;
+}
+
+.important:hover {
+    background-color: darkblue;
+    color: white;
+}
+
+table button {
+    width: 100%;
+    height: 100%;
 }
 
 td {
     padding: 0%;
 }
 
-td :hover {
-    background-color: turquoise;
-}
-
-.player {
+.options th {
     background-color: navy;
     color: white;
     border-color: black;
 }
 
-.tab {
-    margin-left: 2em;
+.active {
+    background-color: darkcyan;
+}
+
+.options {
+    display: inline-table;
+    width: 25%;
 }
 
 .boats {
@@ -48,12 +77,12 @@ td :hover {
 }
 
 .boats td {
-    width: 2em;
-    height: 2em;
+    width: 1.2em;
+    height: 1.2em;
 }
 
 .boats .boat1 {
-    background-color: red;
+    background-color: cyan;
 }
 
 .boats .boat2 {
@@ -65,7 +94,7 @@ td :hover {
 }
 
 .boats .boat4 {
-    background-color: pink;
+    background-color: magenta;
 }
 
 .boats .boat5 {
@@ -77,8 +106,8 @@ td :hover {
 }
 
 .shots td {
-    width: 2em;
-    height: 2em;
+    width: 1.2em;
+    height: 1.2em;
 }
 
 .shots .hit {
