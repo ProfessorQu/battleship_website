@@ -1,0 +1,119 @@
+body {
+    background-color: lightsteelblue;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: large;
+}
+
+.tab {
+    margin-left: 2em;
+}
+
+td {
+    border: 1px solid black;
+    height: 2em;
+}
+
+th {
+    border: 1px solid black;
+}
+
+table {
+    width: 50%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+button {
+    background-color: lightskyblue;
+    border: none;
+    padding: 0.1em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: large;
+    transition-duration: 0.4s;
+}
+
+p {
+    margin: 0%;
+    margin-bottom: 1em;
+}
+
+.important {
+    background-color: lightsteelblue;
+    border: 1px solid darkblue;
+    padding: 0.5em;
+}
+
+.important:hover {
+    background-color: darkblue;
+    color: white;
+}
+
+table button {
+    width: 100%;
+    height: 100%;
+}
+
+td {
+    padding: 0%;
+}
+
+.options th {
+    background-color: navy;
+    color: white;
+    border-color: black;
+}
+
+.active {
+    background-color: darkcyan;
+}
+
+.options {
+    display: inline-table;
+    width: 25%;
+}
+
+.boats {
+    display: inline;
+}
+
+.boats td {
+    width: 1.2em;
+    height: 1.2em;
+}
+
+.boats .boat1 {
+    background-color: cyan;
+}
+
+.boats .boat2 {
+    background-color: green;
+}
+
+.boats .boat3 {
+    background-color: blue;
+}
+
+.boats .boat4 {
+    background-color: magenta;
+}
+
+.boats .boat5 {
+    background-color: yellow;
+}
+
+.shots {
+    display: inline;
+}
+
+.shots td {
+    width: 1.2em;
+    height: 1.2em;
+}
+
+.shots .hit {
+    background-color: red;
+}
+
+.shots .miss {
+    background-color: gray;
+}
